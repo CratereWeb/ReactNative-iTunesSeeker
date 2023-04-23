@@ -14,7 +14,7 @@ Une application Expo pour
 
 1. Ouvrez un terminal dans le répertoire dans lequel vous souhaitez installer le projet.
 2. Télécharger le projet    
-`git clone $url-du-projet-github`
+`git clone https://github.com/CratereWeb/ReactNative-iTunesSeeker.git`
 3. Installer les dépendances        
 `npm install`
 4. Lancer l'application avec Expo   
