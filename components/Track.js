@@ -14,10 +14,16 @@ export default function Track(props) {
         releaseYear:"2001"
     }
 
+    function getCurrentTrack() {
+
+        //~ Récupère l'état de la slice "currentTrack" 
+        //~ afin que le composant sache quelles données afficher
+    }
+
     function addTrackToUserBase() {
         console.log("Ajout d'un morceau à la trackbase...");
 
-        //~ Ajouter le morceau au store "userTracksBase"
+        //~ Ajouter le morceau à l'état de la slice "userTracksBase"
 
     }
 

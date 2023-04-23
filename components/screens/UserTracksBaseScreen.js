@@ -15,10 +15,11 @@ export default function UserTrackBaseScreen({navigation, route}) {
     function suppressTracks() {
         console.log("Suppression des morceaux sélectionnés...");
 
-        //~ Supprimer les morceaux sélectionnés du store "userTracksBase"
+        //~ Récupère l'état de la slice "userTracksBase"
+        //~ Supprimer les morceaux sélectionnés de la slice "userTracksBase"
     }
 
-    //~ À remplacer par le store
+    //~ À remplacer par l'état de la slice
     const tracks = [
         {
             title:"Titre 1",
@@ -38,6 +39,30 @@ export default function UserTrackBaseScreen({navigation, route}) {
             albumTitle:"Album 3",
             releaseYear:"2003"
         },
+        {
+            title:"Titre 4",
+            author:"Artiste 4",
+            albumTitle:"Album 4",
+            releaseYear:"2004"
+        },
+        {
+            title:"Titre 5",
+            author:"Artiste 5",
+            albumTitle:"Album 5",
+            releaseYear:"2005"
+        },
+        {
+            title:"Titre 6",
+            author:"Artiste 6",
+            albumTitle:"Album 6",
+            releaseYear:"2006"
+        },
+        {
+            title:"Titre 7",
+            author:"Artiste 7",
+            albumTitle:"Album 7",
+            releaseYear:"2007"
+        },
     ];
     //~
     
@@ -46,15 +71,7 @@ export default function UserTrackBaseScreen({navigation, route}) {
         <View
             style={styles.container}
         >
-            <Text title="Mes morceaux"></Text>
-
-            <ScrollView 
-                style={styles.list}
-            >
-                {tracks.map( (track, index) => {
-                    return <ListItemTrack key={index} data={track} />
-                })}
-            </ScrollView>
+            {/* <Text title="Mes morceaux"></Text> */}
 
             <View
                 style={styles.buttonsView}
@@ -63,6 +80,7 @@ export default function UserTrackBaseScreen({navigation, route}) {
                     style={styles.deleteButton}
                     title="Supprimer"
                     color='grey'
+                    disabled={true}
                     onPress={() => suppressTracks()}
                 ></Button>
 
@@ -72,26 +90,47 @@ export default function UserTrackBaseScreen({navigation, route}) {
                 ></Button> */}
             </View>
 
+            <ScrollView 
+                style={styles.list}
+            >
+                {tracks.map( (track, index) => {
+                    return (
+                        <ListItemTrack 
+                            key={index} 
+                            data={track} 
+                            // onPress={() => {
+                            //     navigation.push("Track", {
+                            //         data: track
+                            //     });
+                            // }}
+                        />
+                    )
+                })}
+            </ScrollView>
+
+            
+
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%'
+        height: '100%'
     },
     list: {
         width: "100%",
         marginTop: 24,
         display: "flex",
+        marginBottom: 72
     },
-    buttonsView: {
-        width: '100%',
-        display:'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        paddingLeft: 16
-    },
+    // buttonsView: {
+    //     width: '100%',
+    //     display:'flex',
+    //     flexDirection: 'row',
+    //     justifyContent: 'flex-start',
+    //     paddingLeft: 16
+    // },
     deleteButton: {
         backgroundColor: 'grey'
     }

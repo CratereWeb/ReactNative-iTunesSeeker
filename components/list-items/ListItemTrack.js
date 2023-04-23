@@ -12,18 +12,30 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Checkbox from 'expo-checkbox';
 
 
-export default function ListItemTrack(props) {
+export default function ListItemTrack(props, {navigation, route}) {
+
+
+    //~ Le composant doit mettre à jour la slice lorsqu'on clique sur une CheckBox
+    //~ Ainsi, les composants qui listent les morceaux de la requête / de la base de données
+    //~ pourront activer/désactiver le bouton "Ajouter/Supprimer un morceau de la trackbase" en consultat l'état de cette slice
 
     const [isChecked, setChecked] = useState(false);
 
     useEffect( () => {
         isChecked
-        ? console.log("Un morceau est sélectionné")
-        : console.log("Un morceau est désélectionné");
+        ? console.log(`Le morceau ${props.data.title} est sélectionné`)
+        : console.log(`Le morceau ${props.data.title} est désélectionné`);
     }, [isChecked]);
 
+    
     function onPressListItemIcon() {
-        console.log("L'utilisateur souhaite visualiser la fiche d'un morceau...");
+        
+        console.log(`L'utilisateur souhaite visualiser la fiche du morceau ${props.data.title}...`);
+
+        //~ Mettre à jour l'état de la slice "currentTrack"
+
+        //~ Naviguer vers le composant `Track`
+
         
     }
 

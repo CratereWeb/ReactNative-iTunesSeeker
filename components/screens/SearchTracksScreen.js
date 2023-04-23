@@ -14,7 +14,7 @@ import ListItemTrack from '../list-items/ListItemTrack';
 export default function SearchTracksScreen({navigation, route}) {
 
 
-    //~ À remplacer par la requête API 
+    //~ À remplacer par la requête API  (rôle assuré par la fonction locale search() )
     //~ https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/
     var tracks = [
         {
@@ -42,14 +42,19 @@ export default function SearchTracksScreen({navigation, route}) {
     
     // }
     
-    function search() {
-
-        //~ modifie la variable `tracks`
-        
-    }
 
     function onChangeText() {
-        // Pas vraiment grand chose à programmer ici... 
+
+        //~ assigner la value du TextInput à l'état de la slice "userAPIQuery"
+        //~ cette variable est consultée par un composant à chaque fois qu'il a besoin de savoir s'il y a une requête
+        //~ et si oui, faire cette requête à l'API
+    }
+
+    function search() {
+
+        //~ récupérer l'état de la slice "userAPIQuery"
+        //~ faire la requête API à partir de cette valeur
+        //~ mettre à jour la variable `tracks`
     }
 
 
@@ -59,6 +64,23 @@ export default function SearchTracksScreen({navigation, route}) {
             style={styles.container}
         >
             {/* <Text title="Recherche"></Text> */}
+
+            <View
+                style={styles.buttonsView}
+            >
+                <Button
+                    style={styles.addButton}
+                    title="Ajouter à la trackbase"
+                    color='grey'
+                    disabled={true}
+                    onPress={() => suppressTracks()}
+                ></Button>
+
+                {/* <Button
+                    title="Supprimer"
+                    onPress={() => suppressTrack()}
+                ></Button> */}
+            </View>
 
             <ScrollView
                 style={styles.list}
@@ -97,7 +119,7 @@ const styles = StyleSheet.create({
     },
     list: {
         width: "100%",
-        marginTop: 8,
+        marginTop: 24,
         display: "flex",
     },
     searchView: {
