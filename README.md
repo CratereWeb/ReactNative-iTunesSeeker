@@ -26,6 +26,3 @@ Une application Expo pour
 6. L'application se lance sur votre smartphone Android.
 
 ## Pour les utilisateurs
-
-
-# ReactNative-iTunesSeeker
