@@ -1,3 +1,8 @@
+/*
+Slice du Store
+Correpond à la requête de l'utilisateur à l'API iTunes et à la liste de morceaux qu'elle renvoie dans sa réponse.
+*/
+
 import { createSlice } from "@reduxjs/toolkit"
 
 //~ Créer la slice "userAPIQuerySlice" qui stocke la dernière requête saisie par l'utilisateur
