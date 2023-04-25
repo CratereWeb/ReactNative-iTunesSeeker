@@ -3,6 +3,8 @@ Une vue d’affichage d’un morceau
 */
 import { StyleSheet, Text, View, Button } from 'react-native';
 
+
+
 export default function Track(props) {
 
 

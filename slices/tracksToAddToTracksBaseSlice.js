@@ -10,10 +10,10 @@ const tracksToAddToTracksBaseSlice = createSlice({
     name: "tracksToAddToTracksBase",
     initialState: [],
     reducers: {
-        addTrack: (state, action) => {
+        addTrackToAddList: (state, action) => {
             state.push(action.payload);
         },
-        removeTrack: (state, action) => {
+        removeTrackFromAddList: (state, action) => {
             state = state.filter(track => track !== action.payload);
         }
     }
@@ -21,5 +21,5 @@ const tracksToAddToTracksBaseSlice = createSlice({
 //~
 
 
-export const { addTrack, removeTrack } = tracksToAddToTracksBaseSlice.actions;
+export const { addTrackToAddList, removeTrackFromAddList } = tracksToAddToTracksBaseSlice.actions;
 export const tracksToAddToTracksBaseSliceReducer = tracksToAddToTracksBaseSlice.reducer;

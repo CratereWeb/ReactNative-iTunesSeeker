@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
-import { userAPIQuerySliceReducer } from "./slices/userAPIQuerySlice";
+import { userAPIRequestSliceReducer } from "./slices/userAPIRequestSlice";
 import { currentTrackSliceReducer } from "./slices/currentTrackSlice";
 import { userTracksBaseSliceReducer } from "./slices/userTracksBaseSlice";
 import { tracksToAddToTracksBaseSliceReducer } from "./slices/tracksToAddToTracksBaseSlice";
@@ -13,7 +13,7 @@ import persistStore from "redux-persist/es/persistStore";
 
 
 const reducers = combineReducers({
-    userAPIQuery : userAPIQuerySliceReducer,
+    userAPIRequest : userAPIRequestSliceReducer,
     currentTrack : currentTrackSliceReducer,
     userTracksBase : userTracksBaseSliceReducer,
     tracksToAddToTracksBase : tracksToAddToTracksBaseSliceReducer,

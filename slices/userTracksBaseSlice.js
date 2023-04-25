@@ -10,15 +10,15 @@ const userTracksBaseSlice = createSlice({
     name: "userTracksBase",
     initialState: [],
     reducers: {
-        addTrack: (state, action) => {
+        addTrackToUserTracksBase: (state, action) => {
             state.push(action.payload);
         },
-        removeTrack: (state, action) => {
+        removeTrackFromUserTracksBase: (state, action) => {
             state = state.filter(track => track !== action.payload);
         }
     }
 })
 //~
 
-export const { addTrack, removeTrack } = userTracksBaseSlice.actions;
+export const { addTrackToUserTracksBase, removeTrackFromUserTracksBase } = userTracksBaseSlice.actions;
 export const userTracksBaseSliceReducer = userTracksBaseSlice.reducer;

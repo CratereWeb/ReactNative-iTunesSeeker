@@ -12,7 +12,7 @@ const currentTrackSlice = createSlice({
     name: "currentTrack",
     initialState: {},
     reducers: {
-        setTrack: (state, action) => {
+        setCurrentTrack: (state, action) => {
             state = action.payload;
         }
     }
@@ -21,5 +21,5 @@ const currentTrackSlice = createSlice({
 
 
 
-export const { setTrack } = currentTrackSlice.actions;
+export const { setCurrentTrack } = currentTrackSlice.actions;
 export const currentTrackSliceReducer = currentTrackSlice.reducer;
