@@ -5,12 +5,19 @@ import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 
 import ListItemTrack from '../list-items/ListItemTrack';
 
+import { useDispatch, useSelector } from 'react-redux';
+
 export default function UserTrackBaseScreen({navigation, route}) {
+
+
+    
 
 
     const UserTracksBase = () => {
 
     };
+
+    
 
     function suppressTracks() {
         console.log("Suppression des morceaux sélectionnés...");
@@ -98,6 +105,8 @@ export default function UserTrackBaseScreen({navigation, route}) {
                         <ListItemTrack 
                             key={index} 
                             data={track} 
+                            from="UserTracksBaseScreen"
+                            onPress={checkAddToTracksBaseList}
                             // onPress={() => {
                             //     navigation.push("Track", {
                             //         data: track

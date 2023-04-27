@@ -10,10 +10,10 @@ export default function Track(props) {
 
 
     const trackData = {
-        title:"Titre 1",
-        author:"Artiste 1",
-        albumTitle:"Album 1",
-        releaseYear:"2001"
+        trackName:"Titre 1",
+        artistName:"Artiste 1",
+        collectionName:"Album 1",
+        releaseDate:"2001"
     }
 
     function getCurrentTrack() {
@@ -38,17 +38,17 @@ export default function Track(props) {
                 style={styles.dataView}
             >
                 <Text
-                    style={styles.title}
-                >{trackData.title}</Text>
+                    style={styles.trackName}
+                >{trackData.trackName}</Text>
                 <Text
-                    style={styles.author}
-                >{trackData.author}</Text>
+                    style={styles.artistName}
+                >{trackData.artistName}</Text>
                 <Text
-                    style={styles.albumTitle}
-                >{trackData.albumTitle}</Text>
+                    style={styles.collectionName}
+                >{trackData.collectionName}</Text>
                 <Text
-                    style={styles.releaseYear}
-                >{trackData.releaseYear}</Text>
+                    style={styles.releaseDate}
+                >{trackData.releaseDate}</Text>
 
             </View>
 

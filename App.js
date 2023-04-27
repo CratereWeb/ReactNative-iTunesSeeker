@@ -17,6 +17,7 @@ import Home from './components/Home';
 import Track from './components/Track';
 import UserTrackBaseScreen from './components/screens/UserTracksBaseScreen';
 import SearchTracksScreen from './components/screens/SearchTracksScreen';
+import ListItemTrack from './components/list-items/ListItemTrack';
 
 // import { createSlice } from '@reduxjs/toolkit';
 // import ListItemTrack from './components/list-items/ListItemTrack';
@@ -37,7 +38,7 @@ export default function App() {
             <Stack.Screen name={'Recherche'} component={SearchTracksScreen}></Stack.Screen>
             <Stack.Screen name={'Mes morceaux'} component={UserTrackBaseScreen}></Stack.Screen>
             <Stack.Screen name={'Track'} component={Track}></Stack.Screen>
-            {/* <Stack.Screen name={'ListItemTrack'} component={ListItemTrack}></Stack.Screen> */}
+            <Stack.Screen name={'ListItemTrack'} component={ListItemTrack}></Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>
       </PersistGate>

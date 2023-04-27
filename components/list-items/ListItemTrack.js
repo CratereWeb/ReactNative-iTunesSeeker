@@ -7,9 +7,13 @@ Un élément représentant un morceau dans une liste "ScrollView", pour les écr
 import { StyleSheet, Text, View } from 'react-native';
 import { useState, useEffect } from 'react';
 
+import { addTrackToUserTracksBase } from '../../slices/userTracksBaseSlice';
+import { addTrackToAddList, removeTrackFromAddList } from '../../slices/tracksToAddToTracksBaseSlice';
+
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import Checkbox from 'expo-checkbox';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 export default function ListItemTrack(props, {navigation, route}) {
@@ -20,17 +24,47 @@ export default function ListItemTrack(props, {navigation, route}) {
     //~ pourront activer/désactiver le bouton "Ajouter/Supprimer un morceau de la trackbase" en consultat l'état de cette slice
 
     const [isChecked, setChecked] = useState(false);
+    const [eyeButtonColor, setEyeButtonColor] = useState("#cdcdcd");
+
+    const dispatch = useDispatch();
+    // const tracksToAddToTracksBaseSelector = useSelector(state => state.tracksToAddToTracksBase);
+
 
     useEffect( () => {
-        isChecked
-        ? console.log(`Le morceau ${props.data.title} est sélectionné`)
-        : console.log(`Le morceau ${props.data.title} est désélectionné`);
+        if (isChecked) {
+            console.log(`Le morceau ${props.data.trackName} est sélectionné`);
+            dispatch(addTrackToAddList(props.data));
+        } else {
+            console.log(`Le morceau ${props.data.trackName} est désélectionné`);
+            dispatch(removeTrackFromAddList(props.data));
+
+        }
     }, [isChecked]);
 
     
+
+    useEffect( () => {
+        setChecked(false)
+    }, [props.data]); // réinitialise l'état des checkbox lorsque de nouvelles données arrivent
+
+    useEffect( () => {
+        setEyeButtonColor("#cdcdcd");
+    }, [props.data])
+
+    
     function onPressListItemIcon() {
+
+        setEyeButtonColor("#aaaaaa");
+        setTimeout( () => {
+            setEyeButtonColor("#cdcdcd");
+        }, 100);
         
-        console.log(`L'utilisateur souhaite visualiser la fiche du morceau ${props.data.title}...`);
+
+        
+        console.log(`L'utilisateur souhaite visualiser la fiche du morceau ${props.data.trackName}...`);
+
+        console.log(navigation);
+        
 
         //~ Mettre à jour l'état de la slice "currentTrack"
 
@@ -40,7 +74,20 @@ export default function ListItemTrack(props, {navigation, route}) {
     }
 
 
+
+    /*
+        {
+            title: media.trackName,
+            artist: media.artistName,
+            albumTitle: media.collectionName,
+            releaseYear: media.releaseDate
+        }
+    */
+    
+
+
     return (
+
         <View 
             style={styles.container}
         >
@@ -57,24 +104,24 @@ export default function ListItemTrack(props, {navigation, route}) {
 
                 <Text 
                     style={styles.title}
-                >{props.data.title}</Text>
+                >{props.data.trackName}</Text>
                 <Text 
                     //style={styles.author}
-                >{props.data.author}</Text>
+                >{props.data.artistName}</Text>
                 <Text 
                     //style={styles.albumTitle}
-                >{props.data.albumTitle}</Text>
+                >{props.data.collectionName}</Text>
                 <Text 
                     //style={styles.releaseYear}
-                >{props.data.releaseYear}</Text>
+                >{props.data.releaseDate}</Text>
 
             </View>
 
             <Ionicons 
                 style={styles.detailsIcon}
-                name="arrow-forward-circle" 
+                name="eye" 
                 size={32} 
-                color="grey"
+                color={eyeButtonColor}
                 onPress={onPressListItemIcon}
             />
 

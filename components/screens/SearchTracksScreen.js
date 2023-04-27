@@ -9,6 +9,7 @@
 
 import { StyleSheet, Text, View, Button, ScrollView, TextInput } from 'react-native';
 
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserAPIRequestQuery, emptyUserAPIRequestQuery, setUserAPIRequestResults, emptyUserAPIRequestResults } from '../../slices/userAPIRequestSlice';
 
@@ -20,9 +21,17 @@ export default function SearchTracksScreen({ navigation, route }) {
 
     const dispatch = useDispatch();
     const userAPIRequestQuerySelector = useSelector(state => state.userAPIRequest.query);
-    const userAPIRequestResultsSelector= useSelector(state => state.userAPIRequest.results);
+    const userAPIRequestResultsSelector = useSelector(state => state.userAPIRequest.results);
     const userTracksBaseSelector = useSelector(state => state.userTracksBase);
 
+    const [isAddToTracksBaseButtonActive, setAddToTracksBaseButtonActive] = useState(false);
+    const tracksToAddToTracksBaseSelector = useSelector(state => state.tracksToAddToTracksBase);
+    
+    useEffect( () => {
+        console.log(tracksToAddToTracksBaseSelector[tracksToAddToTracksBaseSelector.length-1]);
+        console.log(tracksToAddToTracksBaseSelector.length)
+        console.log("TEST");
+    }, [tracksToAddToTracksBaseSelector])
 
 
     //~ À remplacer par la requête API  (rôle assuré par la fonction locale search() )
@@ -49,11 +58,11 @@ export default function SearchTracksScreen({ navigation, route }) {
     ];
     //~
 
+
+
     // const userSearchResults = () => {
 
     // }
-
-
 
     function getSelectedTracks() {
 
@@ -66,21 +75,53 @@ export default function SearchTracksScreen({ navigation, route }) {
 
         //~ 1ère étape
         //_ const selectedTracks = getSelectedTracks();
-        
+
         //~ 2ème étape
         //~ ajoute les tracks sélectionnées à la trackbase
         /*
         _ dispatch() => 
-        */ 
+        */
 
 
     }
 
-    function onChangeText() {
+    function onChangeText(text) {
 
         //~ assigner la value du TextInput à l'état de la slice "userAPIRequest"
         //~ cette variable est consultée par un composant à chaque fois qu'il a besoin de savoir s'il y a une requête
         //~ et si oui, faire cette requête à l'API
+        console.log(text);
+        dispatch(setUserAPIRequestQuery(text));
+    }
+
+    function updateSearchResults(data) {
+        
+        console.log(data.results.length + " médias trouvés.");
+        dispatch(setUserAPIRequestResults(data.results))
+        console.log(userAPIRequestResultsSelector);
+        /*
+        {
+            title: media.trackName,
+            artist: media.artistName,
+            albumTitle: media.collectionName,
+            releaseYear: media.releaseDate
+        }
+        */
+        // results.forEach(media => {
+        //     tracks.push(
+        //         {
+        //             title: media.trackName,
+        //             author: media.artistName,
+        //             albumTitle: media.collectionName,
+        //             releaseYear: media.releaseDate
+
+        //         },
+
+        //     )
+        // })
+
+
+        // console.log(tracks[0])
     }
 
     function search() {
@@ -88,7 +129,18 @@ export default function SearchTracksScreen({ navigation, route }) {
         //~ récupérer l'état de la slice "userAPIRequest"
         //~ faire la requête API à partir de cette valeur
         //~ mettre à jour la variable `tracks`
+        // console.log(btn.text);
+        // console.log(userAPIRequestQuerySelector);
+        let query = userAPIRequestQuerySelector;
+        const API_QUERY_URL = `https://itunes.apple.com/search?media=music&term=${query}`;
+        // console.log(API_QUERY_URL);
+
+        fetch(API_QUERY_URL)
+            .then(response => response.json())
+            .then(jsonData => updateSearchResults(jsonData));
+            // .then(data => updateSearchResults(data));
     }
+
 
 
     return (
@@ -118,12 +170,12 @@ export default function SearchTracksScreen({ navigation, route }) {
             <ScrollView
                 style={styles.list}
             >
-                {tracks.map((track, index) => {
+                {userAPIRequestResultsSelector.map((track, index) => {
                     return (
                         <View>
-                            <ListItemTrack key={index} data={track} />
+                            <ListItemTrack key={index} data={track} from="SearchTracksScreen" />
                         </View>
-                    )     
+                    )
                 })}
             </ScrollView>
 
@@ -132,7 +184,7 @@ export default function SearchTracksScreen({ navigation, route }) {
             >
                 <TextInput
                     style={styles.searchInput}
-                    onChangeText={onChangeText}
+                    onChangeText={text => onChangeText(text)}
                     placeholder="Chercher un titre, un artiste, un album..."
                 />
                 <Button
@@ -156,7 +208,7 @@ const styles = StyleSheet.create({
     },
     list: {
         width: "100%",
-        marginTop: 24,
+        marginBottom: 64,
         display: "flex",
     },
     searchView: {
