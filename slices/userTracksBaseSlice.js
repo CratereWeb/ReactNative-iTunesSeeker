@@ -14,7 +14,8 @@ const userTracksBaseSlice = createSlice({
             state.push(action.payload);
         },
         removeTrackFromUserTracksBase: (state, action) => {
-            state = state.filter(track => track !== action.payload);
+            state = state.filter(track => track.trackId !== action.payload.trackId);
+            return state;
         }
     }
 })

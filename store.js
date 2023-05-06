@@ -30,5 +30,6 @@ export const store = configureStore(
         middleware: [thunk]
     }
 )
-
 export const persistor = persistStore(store);
+
+// persistor.purge() // Purger la mémoire pour les tests

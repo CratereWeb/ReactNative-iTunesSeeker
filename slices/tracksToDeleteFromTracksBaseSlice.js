@@ -14,7 +14,8 @@ const tracksToDeleteFromTracksBaseSlice = createSlice({
             state.push(action.payload);
         },
         removeTrackFromDeleteList: (state, action) => {
-            state = state.filter(track => track !== action.payload);
+            state = state.filter(track => track.trackId !== action.payload.trackId);
+            return state;
         }
     }
 })

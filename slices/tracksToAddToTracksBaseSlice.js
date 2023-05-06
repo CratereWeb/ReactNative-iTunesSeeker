@@ -14,12 +14,19 @@ const tracksToAddToTracksBaseSlice = createSlice({
             state.push(action.payload);
         },
         removeTrackFromAddList: (state, action) => {
-            state = state.filter(track => track !== action.payload);
+            console.log("Avant :", state.length);
+            console.log(action.payload.trackId, "(from tracksToAddToTracksBaseSlice)");
+            state = state.filter(track => track.trackId !== action.payload.trackId);
+            console.log("Après :", state.length);
+            return state;
+        },
+        emptyTracksToAddList: (state, action) => {
+            state = [];
         }
     }
 })
 //~
 
 
-export const { addTrackToAddList, removeTrackFromAddList } = tracksToAddToTracksBaseSlice.actions;
+export const { addTrackToAddList, removeTrackFromAddList, emptyTracksToAddList } = tracksToAddToTracksBaseSlice.actions;
 export const tracksToAddToTracksBaseSliceReducer = tracksToAddToTracksBaseSlice.reducer;

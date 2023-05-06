@@ -11,7 +11,11 @@ import { StyleSheet, Text, View, Button, ScrollView, TextInput } from 'react-nat
 
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { emptyTracksToAddList } from '../../slices/tracksToAddToTracksBaseSlice';
 import { setUserAPIRequestQuery, emptyUserAPIRequestQuery, setUserAPIRequestResults, emptyUserAPIRequestResults } from '../../slices/userAPIRequestSlice';
+import { addTrackToUserTracksBase } from '../../slices/userTracksBaseSlice';
+import Ionicons from '@expo/vector-icons/Ionicons';
+
 
 import ListItemTrack from '../list-items/ListItemTrack';
 
@@ -29,8 +33,13 @@ export default function SearchTracksScreen({ navigation, route }) {
     
     useEffect( () => {
         console.log(tracksToAddToTracksBaseSelector[tracksToAddToTracksBaseSelector.length-1]);
-        console.log(tracksToAddToTracksBaseSelector.length)
-        console.log("TEST");
+        // console.log("TEST");
+        if (tracksToAddToTracksBaseSelector.length > 0) {
+            setAddToTracksBaseButtonActive(true);
+        } else if (tracksToAddToTracksBaseSelector.length == 0) {
+            setAddToTracksBaseButtonActive(false);
+        }
+        console.log("Il y a désormais", tracksToAddToTracksBaseSelector.length, "morceaux dans la liste temporaire.")
     }, [tracksToAddToTracksBaseSelector])
 
 
@@ -68,20 +77,25 @@ export default function SearchTracksScreen({ navigation, route }) {
 
         //~ récupère la valeur de la slice "tracksToAddToUserTracksBase"
         //~ note : ce slice aura été modifié via le click sur les CheckBox respectives des instances du composant ListItemTrack, et sa valeur sera la liste des morceaux à ajouter à la trackbase
-
+        return tracksToAddToTracksBaseSelector;
     }
 
-    function addTracksToUserTracksBase() {
+    function addToTrackbase() {
 
         //~ 1ère étape
         //_ const selectedTracks = getSelectedTracks();
+        const selectedTracks = getSelectedTracks();
 
         //~ 2ème étape
         //~ ajoute les tracks sélectionnées à la trackbase
         /*
         _ dispatch() => 
         */
-
+        selectedTracks.forEach(track => {
+            if (!userTracksBaseSelector.includes(track)) {
+                dispatch(addTrackToUserTracksBase(track));
+            }
+        })
 
     }
 
@@ -129,8 +143,6 @@ export default function SearchTracksScreen({ navigation, route }) {
         //~ récupérer l'état de la slice "userAPIRequest"
         //~ faire la requête API à partir de cette valeur
         //~ mettre à jour la variable `tracks`
-        // console.log(btn.text);
-        // console.log(userAPIRequestQuerySelector);
         let query = userAPIRequestQuerySelector;
         const API_QUERY_URL = `https://itunes.apple.com/search?media=music&term=${query}`;
         // console.log(API_QUERY_URL);
@@ -141,6 +153,12 @@ export default function SearchTracksScreen({ navigation, route }) {
             // .then(data => updateSearchResults(data));
     }
 
+    // function emptyTracksToAddToTracksBaseList() {
+    //     // dispatch(emptyTracksToAddList());
+    //     persistor.purge()
+    //     console.log(tracksToAddToTracksBaseSelector.length)
+    //     console.log("La liste temporaire est vide.");
+    // }
 
 
     return (
@@ -153,12 +171,19 @@ export default function SearchTracksScreen({ navigation, route }) {
             <View
                 style={styles.buttonsView}
             >
+                {/* <Ionicons 
+                    name="trash" 
+                    size={30} 
+                    color='grey'
+                    onPress={() => emptyTracksToAddToTracksBaseList()}
+                /> */}
+
                 <Button
                     style={styles.addButton}
                     title="Ajouter à la trackbase"
                     color='grey'
-                    disabled={true}
-                    onPress={() => addTracksToUserTracksBase()}
+                    disabled={!isAddToTracksBaseButtonActive}
+                    onPress={() => addToTrackbase()}
                 ></Button>
 
                 {/* <Button
@@ -211,6 +236,12 @@ const styles = StyleSheet.create({
         marginBottom: 64,
         display: "flex",
     },
+    // buttonsView : {
+    //     display: 'flex',
+    //     flexDirection: 'row',
+    //     justifyContent: 'space-between',
+    //     padding: 24
+    // },
     searchView: {
         position: 'absolute',
         // paddingLeft: 24,

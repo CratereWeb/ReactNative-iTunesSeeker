@@ -7,8 +7,10 @@ Un élément représentant un morceau dans une liste "ScrollView", pour les écr
 import { StyleSheet, Text, View } from 'react-native';
 import { useState, useEffect } from 'react';
 
-import { addTrackToUserTracksBase } from '../../slices/userTracksBaseSlice';
+import { addTracksToUserTracksBase } from '../../slices/userTracksBaseSlice';
 import { addTrackToAddList, removeTrackFromAddList } from '../../slices/tracksToAddToTracksBaseSlice';
+
+import { addTrackToDeleteList, removeTrackFromDeleteList } from '../../slices/tracksToDeleteFromTracksBaseSlice';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -27,24 +29,60 @@ export default function ListItemTrack(props, {navigation, route}) {
     const [eyeButtonColor, setEyeButtonColor] = useState("#cdcdcd");
 
     const dispatch = useDispatch();
-    // const tracksToAddToTracksBaseSelector = useSelector(state => state.tracksToAddToTracksBase);
+    const tracksToAddToTracksBaseSelector = useSelector(state => state.tracksToAddToTracksBase);
+    const userTracksBaseSelector = useSelector(state => state.userTracksBase);
+
+    const tracksToRemoveFromTracksBaseSelector = useSelector(state => state.tracksToDeleteFromTracksBase);
+
 
 
     useEffect( () => {
-        if (isChecked) {
-            console.log(`Le morceau ${props.data.trackName} est sélectionné`);
-            dispatch(addTrackToAddList(props.data));
-        } else {
-            console.log(`Le morceau ${props.data.trackName} est désélectionné`);
-            dispatch(removeTrackFromAddList(props.data));
+        
+        if (props.from == "SearchTracksScreen") {
+            if (isChecked) {
+
+                console.log(`Le morceau ${props.data.trackName} est sélectionné`);
+
+                if(!tracksToAddToTracksBaseSelector.includes(props.data)) {
+                    dispatch(addTrackToAddList(props.data));
+                } else {
+                    console.log(props.data["trackName"], "est déjà dans la liste temporaire 'à ajouter à la trackbase'.")
+                }
+
+            } else {
+                console.log(`Le morceau ${props.data.trackName} est désélectionné`);
+                dispatch(removeTrackFromAddList(props.data));
+
+            }
+
+        } else if (props.from == "UserTracksBaseScreen") {
+
+            if (isChecked) {
+
+                console.log(`Le morceau ${props.data.trackName} est sélectionné`);
+
+                if(!tracksToRemoveFromTracksBaseSelector.includes(props.data)) {
+                    dispatch(addTrackToDeleteList(props.data));
+                } else {
+                    console.log(props.data["trackName"], "est déjà dans la liste temporaire 'à supprimer de la trackbase'.")
+                }
+
+                
+            } else {
+                console.log(`Le morceau ${props.data.trackName} est désélectionné`);
+                dispatch(removeTrackFromDeleteList(props.data));
+
+            }
+
 
         }
+
     }, [isChecked]);
 
     
 
     useEffect( () => {
-        setChecked(false)
+        setChecked(false);
     }, [props.data]); // réinitialise l'état des checkbox lorsque de nouvelles données arrivent
 
     useEffect( () => {
@@ -52,20 +90,17 @@ export default function ListItemTrack(props, {navigation, route}) {
     }, [props.data])
 
     
-    function onPressListItemIcon() {
+    function onPressListItemViewIcon() {
 
         setEyeButtonColor("#aaaaaa");
         setTimeout( () => {
             setEyeButtonColor("#cdcdcd");
         }, 100);
         
-
-        
         console.log(`L'utilisateur souhaite visualiser la fiche du morceau ${props.data.trackName}...`);
 
-        console.log(navigation);
+        console.log(navigation, "navigation");
         
-
         //~ Mettre à jour l'état de la slice "currentTrack"
 
         //~ Naviguer vers le composant `Track`
@@ -73,7 +108,14 @@ export default function ListItemTrack(props, {navigation, route}) {
         
     }
 
-
+    function trackIsInUserTracksBase() {
+        // console.log('Trackbase :', userTracksBaseSelector)
+        if (userTracksBaseSelector.includes(props.data)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /*
         {
@@ -84,19 +126,32 @@ export default function ListItemTrack(props, {navigation, route}) {
         }
     */
     
-
-
     return (
 
         <View 
             style={styles.container}
         >
-            <Checkbox
-                // style={styles.checkbox}
-                value={isChecked}
-                onValueChange={setChecked}
-                color={isChecked ? '#4630EB' : undefined}
-            />
+            
+            {props.from == "SearchTracksScreen" ? (
+                <Checkbox
+                    // style={styles.checkbox}
+                    value={isChecked}
+                    onValueChange={setChecked}
+                    color={isChecked ? '#4630EB' : undefined}
+                    disabled={trackIsInUserTracksBase()}
+                />
+            ) : (
+                <Checkbox
+                    // style={styles.checkbox}
+                    value={isChecked}
+                    onValueChange={setChecked}
+                    color={isChecked ? '#4630EB' : undefined}
+                    // disabled={trackIsInUserTracksBase()}
+                />
+            )}
+            
+
+            
 
             <View
                 style={styles.data}
@@ -122,7 +177,7 @@ export default function ListItemTrack(props, {navigation, route}) {
                 name="eye" 
                 size={32} 
                 color={eyeButtonColor}
-                onPress={onPressListItemIcon}
+                onPress={onPressListItemViewIcon}
             />
 
         </View>

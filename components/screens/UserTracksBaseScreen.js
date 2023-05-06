@@ -5,29 +5,77 @@ import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 
 import ListItemTrack from '../list-items/ListItemTrack';
 
+
+
 import { useDispatch, useSelector } from 'react-redux';
+
+import { useState, useEffect } from 'react';
+import { removeTrackFromUserTracksBase } from '../../slices/userTracksBaseSlice';
 
 export default function UserTrackBaseScreen({navigation, route}) {
 
 
     
+    const dispatch = useDispatch();
+    const userTracksBaseSelector = useSelector(state => state.userTracksBase);
+
+    const [isDeleteFromTracksBaseButtonActive, setDeleteFromTracksBaseButtonActive] = useState(false);
+    const tracksToDeleteFromTracksBaseSelector = useSelector(state => state.tracksToDeleteFromTracksBase);
+
+    
+    useEffect( () => {
+        console.log(tracksToDeleteFromTracksBaseSelector[tracksToDeleteFromTracksBaseSelector.length-1]);
+        // console.log("TEST");
+        if (tracksToDeleteFromTracksBaseSelector.length > 0) {
+            setDeleteFromTracksBaseButtonActive(true);
+        } else if (tracksToDeleteFromTracksBaseSelector.length == 0) {
+            setDeleteFromTracksBaseButtonActive(false);
+        }
+        console.log("Il y a désormais", tracksToDeleteFromTracksBaseSelector.length, "morceaux dans la liste temporaire 'à supprimer de la trackbase'.")
+
+    }, [tracksToDeleteFromTracksBaseSelector])
+
 
 
     const UserTracksBase = () => {
 
     };
 
+
+    function getSelectedTracks() {
+        return tracksToDeleteFromTracksBaseSelector;
+    }
     
 
     function suppressTracks() {
+
         console.log("Suppression des morceaux sélectionnés...");
 
         //~ Récupère l'état de la slice "userTracksBase"
+        const selectedTracks = getSelectedTracks();
+
+        console.log("Tracks to delete :", selectedTracks.length, '=>', selectedTracks);
+        
         //~ Supprimer les morceaux sélectionnés de la slice "userTracksBase"
+        if (selectedTracks.length > 0) {
+            
+            selectedTracks.forEach(track => {
+
+                if (userTracksBaseSelector.includes(track)) {
+                    console.log("SUPPRIMER");
+                    dispatch(removeTrackFromUserTracksBase(track));
+                } 
+            });
+        }
     }
 
+    // function checkAddToTracksBaseList() {
+    //     return
+    // }
+
     //~ À remplacer par l'état de la slice
-    const tracks = [
+    const tracks = userTracksBaseSelector;
+    /* const tracks = [
         {
             title:"Titre 1",
             author:"Artiste 1",
@@ -71,7 +119,11 @@ export default function UserTrackBaseScreen({navigation, route}) {
             releaseYear:"2007"
         },
     ];
+    */
     //~
+
+
+    console.log(tracks);
     
 
     return (
@@ -87,7 +139,7 @@ export default function UserTrackBaseScreen({navigation, route}) {
                     style={styles.deleteButton}
                     title="Supprimer"
                     color='grey'
-                    disabled={true}
+                    disabled={!isDeleteFromTracksBaseButtonActive}
                     onPress={() => suppressTracks()}
                 ></Button>
 
@@ -102,17 +154,9 @@ export default function UserTrackBaseScreen({navigation, route}) {
             >
                 {tracks.map( (track, index) => {
                     return (
-                        <ListItemTrack 
-                            key={index} 
-                            data={track} 
-                            from="UserTracksBaseScreen"
-                            onPress={checkAddToTracksBaseList}
-                            // onPress={() => {
-                            //     navigation.push("Track", {
-                            //         data: track
-                            //     });
-                            // }}
-                        />
+                        <View>
+                            <ListItemTrack key={index} data={track} from="UserTracksBaseScreen" />
+                        </View>
                     )
                 })}
             </ScrollView>
